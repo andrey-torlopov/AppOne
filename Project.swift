@@ -48,7 +48,7 @@ let project = Project(
             deploymentTargets: .iOS(minimalVersioniOS),
             infoPlist: .file(path: "AppOne/Apps/Dev/Info.plist"),
             sources: ["AppOne/Sources/**"],
-            resources: ["AppOne/Apps/Dev/**"],
+            resources: ["AppOne/Resources/**"],
             dependencies: [],
             settings: Settings.settings(
                 base: [
@@ -72,8 +72,7 @@ let project = Project(
             bundleId: bundleId.lowercased(),
             deploymentTargets: .iOS(minimalVersioniOS),
             infoPlist: .file(path: "AppOne/Apps/Prod/Info.plist"),
-            sources: ["AppOne/Sources/**",
-                      "AppOne/Apps/Prod/**"],
+            sources: ["AppOne/Sources/**"],
             resources: ["AppOne/Resources/**"],
             dependencies: [],
             settings: Settings.settings(

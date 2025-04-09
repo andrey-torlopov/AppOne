@@ -1,0 +1,62 @@
+name: Build and Test with Tuist
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed for git operations later
+
+      - name: Install Tuist 4.47.0
+        run: |
+          mkdir -p ~/.tuist/bin
+          curl -L https://github.com/tuist/tuist/releases/download/4.47.0/tuist.zip -o tuist.zip
+          unzip tuist.zip -d ~/.tuist/bin
+          chmod +x ~/.tuist/bin/tuist
+          echo "$HOME/.tuist/bin" >> $GITHUB_PATH
+
+      - name: Verify Installation
+        run: tuist version
+
+      # - name: Clean up before generation
+      #   run: |
+      #     # Remove DerivedData
+      #     rm -rf ~/Library/Developer/Xcode/DerivedData/*
+          
+      #     # Remove Xcode project files
+      #     find . -type d -name "*.xcodeproj" -exec rm -rf {} +
+      #     find . -type d -name "*.xcworkspace" -exec rm -rf {} +
+
+      # - name: Generate Project
+      #   run: tuist generate --no-open
+
+      # - name: Commit generated files
+      #   env:
+      #     # Настраиваем доступ к репозиторию через GITHUB_TOKEN
+      #     REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+      #   run: |
+      #     # Настройка Git
+      #     git config --global user.name "GitHub Actions"
+      #     git config --global user.email "actions@github.com"
+
+      #     # Добавляем только нужные файлы (исключаем xcuserdata)
+      #     git add *.xcodeproj/project.pbxproj
+      #     git add *.xcworkspace/contents.xcworkspacedata
+      #     git add Tuist/Dependencies/*
+
+      #     # Проверяем, есть ли изменения
+      #     if [ -n "$(git status --porcelain)" ]; then
+      #       git commit -m "Regenerate project files with Tuist [ci skip]"
+      #       git push $REPO_URL HEAD:${{ github.ref }}
+      #     else
+      #       echo "No changes to commit."
+      #     fi
